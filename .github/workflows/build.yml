@@ -30,9 +30,9 @@ jobs:
         
     - name: Read version
       id: version
-      shell: pwsh
       run: |
-        python -c "from version import __version__; print(f'version={__version__}')" | ForEach-Object { $content = $_; Add-Content -Path $env:GITHUB_OUTPUT -Value $content }
+        python -c "from version import __version__; print(f'version={__version__}')" >> $GITHUB_OUTPUT
+      shell: bash
         
     - name: Build EXE
       run: |
