@@ -38,6 +38,18 @@ jobs:
       run: |
         python build_exe.py
       
+    - name: Verify EXE file exists
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        if (-not (Test-Path "dist\*.exe")) {
+          Write-Host "ERROR: No EXE file found in dist/"
+          Get-ChildItem -Path dist -Recurse | ForEach-Object { Write-Host $_.FullName }
+          exit 1
+        }
+        Write-Host "EXE file found:"
+        Get-ChildItem -Path dist -Filter *.exe | ForEach-Object { Write-Host $_.FullName }
+      shell: pwsh
+      
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
@@ -58,6 +70,7 @@ jobs:
         tag_name: ${{ steps.tag.outputs.tag }}
         name: Navisworks Viewpoint Manager ${{ steps.tag.outputs.tag }}
         files: dist/*.exe
+        fail_on_unmatched_files: true
         draft: false
         prerelease: false
         body: |
