@@ -21,6 +21,178 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
 
+SUPPORTED_LANGUAGES = ['ru', 'en']
+
+LANGUAGE_STRINGS = {
+    'ru': {
+        'language.label': 'Язык:',
+        'language.ru': 'Русский',
+        'language.en': 'Английский',
+        'window.title': 'Navisworks Viewpoint Manager (Qt)',
+        'toolbar.main': 'Основные команды',
+        'data.root_folder': 'Корень',
+        'structure_source': 'Структура',
+        'checkbox.always_on_top': 'Всегда сверху',
+        'labels.bulk_names': 'Имена точек (через пробел):',
+        'labels.target_folder': 'В папку:',
+        'labels.search': 'Поиск точек:',
+        'placeholders.bulk_names': 'Вставьте имена, каждое на новой строке',
+        'placeholders.search_names': 'например: 1311 1312 1314 ...',
+        'placeholders.search_results': 'Результаты поиска...',
+        'placeholders.left_filter': 'Фильтр точек (имя или GUID)',
+        'buttons.bulk_move': 'Переместить',
+        'buttons.clear': 'Очистить',
+        'buttons.search': 'Поиск',
+        'buttons.copy_results': 'Копировать результаты',
+        'tabs.info': 'Инфо',
+        'tabs.log': 'Лог',
+        'groups.left': 'Все точки обзора',
+        'groups.right': 'Структура организации',
+        'tree.headers.name': 'Имя точки',
+        'tree.headers.file': 'Имя файла',
+        'bulk.separator.label': 'Разделители:',
+        'bulk.separator.tab': 'Табуляция ↹',
+        'bulk.separator.semicolon': 'Точка с запятой ;',
+        'bulk.separator.comma': 'Запятая ,',
+        'bulk.separator.space': 'Пробел',
+        'bulk.separator.other': 'Другой:',
+        'bulk.separator.other_placeholder': 'символ',
+        'actions.open': 'Загрузить XML...',
+        'actions.export': 'Экспорт XML...',
+        'actions.exit': 'Выход',
+        'actions.new_folder': 'Создать папку',
+        'actions.rename': 'Переименовать',
+        'actions.delete': 'Удалить',
+        'actions.collapse': 'Свернуть все',
+        'actions.about': 'О программе',
+        'actions.clear_all': 'Очистить всё',
+        'actions.clean_names': 'Очистить счётчики в именах',
+        'tooltips.collapse': 'Свернуть все папки в структуре',
+        'tooltips.clear_all': 'Очистить все загруженные данные и сбросить форму',
+        'tooltips.clean_names': 'Убрать счётчики точек из имён папок (например: "ЛКП (213)" → "ЛКП")',
+        'menus.file': 'Файл',
+        'menus.edit': 'Правка',
+        'menus.language': 'Язык',
+        'menus.view': 'Вид',
+        'menus.help': 'Справка',
+        'dialogs.open_xml.title': 'Выберите XML файлы',
+        'dialogs.save_xml.title': 'Сохранить XML',
+        'input.create_folder.title': 'Создать папку',
+        'input.create_folder.label': 'Имя папки:',
+        'input.rename.title': 'Переименовать',
+        'input.rename.label': 'Новое имя:',
+        'messages.delete.title': 'Удалить',
+        'messages.delete.body': 'Удалить выбранные элементы?',
+        'messages.error.title': 'Ошибка',
+        'messages.success.title': 'Готово',
+        'messages.empty.title': 'Пусто',
+        'messages.empty.body': 'Нет данных для экспорта',
+        'messages.save.success': 'Сохранено: {path}',
+        'messages.load.error': 'Не удалось загрузить {path}:\n{error}',
+        'messages.load.success': 'Загружено файлов: {count}',
+        'about.text': 'Navisworks Viewpoint Manager (Qt)\nДва дерева, drag&drop, экспорт XML.',
+        'status.search.all_found': 'Все точки найдены',
+        'context.sort_menu': 'Сортировка',
+        'context.sort_selected_menu': 'Сортировать выделенные',
+        'context.sort.nat_asc': 'По-умному A→Z',
+        'context.sort.nat_desc': 'По-умному Z→A',
+        'context.sort.guid': 'По GUID',
+        'context.sort_selected.nat_asc': 'По-умному A→Z (только выделенные)',
+        'context.sort_selected.nat_desc': 'По-умному Z→A (только выделенные)',
+        'context.sort_selected.guid': 'По GUID (только выделенные)',
+        'info.ready': 'Готов к загрузке XML файлов.',
+        'defaults.unnamed_view': 'Безымянная точка',
+        'tabs.tasks.general': 'Общая',
+        'tabs.tasks.general_placeholder': 'Выберите задачу на соседних вкладках или используйте вкладки ниже.',
+        'tabs.tasks.move': 'Перемещение точек',
+        'tabs.tasks.search': 'Поиск точек',
+    },
+    'en': {
+        'language.label': 'Language:',
+        'language.ru': 'Russian',
+        'language.en': 'English',
+        'window.title': 'Navisworks Viewpoint Manager (Qt)',
+        'toolbar.main': 'Main Toolbar',
+        'data.root_folder': 'Root',
+        'structure_source': 'Structure',
+        'checkbox.always_on_top': 'Always on top',
+        'labels.bulk_names': 'Viewpoint names (space-separated):',
+        'labels.target_folder': 'To folder:',
+        'labels.search': 'Find viewpoints:',
+        'placeholders.bulk_names': 'Enter one name per line',
+        'placeholders.search_names': 'e.g. 1311 1312 1314 ...',
+        'placeholders.search_results': 'Search results...',
+        'placeholders.left_filter': 'Filter viewpoints (name or GUID)',
+        'buttons.bulk_move': 'Move',
+        'buttons.clear': 'Clear',
+        'buttons.search': 'Find',
+        'buttons.copy_results': 'Copy results',
+        'tabs.info': 'Info',
+        'tabs.log': 'Log',
+        'groups.left': 'All viewpoints',
+        'groups.right': 'Destination structure',
+        'tree.headers.name': 'Viewpoint name',
+        'tree.headers.file': 'File name',
+        'bulk.separator.label': 'Separators:',
+        'bulk.separator.tab': 'Tab ↹',
+        'bulk.separator.semicolon': 'Semicolon ;',
+        'bulk.separator.comma': 'Comma ,',
+        'bulk.separator.space': 'Space',
+        'bulk.separator.other': 'Other:',
+        'bulk.separator.other_placeholder': 'char',
+        'actions.open': 'Load XML...',
+        'actions.export': 'Export XML...',
+        'actions.exit': 'Exit',
+        'actions.new_folder': 'Create folder',
+        'actions.rename': 'Rename',
+        'actions.delete': 'Delete',
+        'actions.collapse': 'Collapse all',
+        'actions.about': 'About',
+        'actions.clear_all': 'Clear all',
+        'actions.clean_names': 'Clean counters in names',
+        'tooltips.collapse': 'Collapse all folders in the structure',
+        'tooltips.clear_all': 'Clear all loaded data and reset the form',
+        'tooltips.clean_names': 'Remove point counters from folder names (e.g. "LKP (213)" → "LKP")',
+        'menus.file': 'File',
+        'menus.edit': 'Edit',
+        'menus.language': 'Language',
+        'menus.view': 'View',
+        'menus.help': 'Help',
+        'dialogs.open_xml.title': 'Select XML files',
+        'dialogs.save_xml.title': 'Save XML',
+        'input.create_folder.title': 'Create folder',
+        'input.create_folder.label': 'Folder name:',
+        'input.rename.title': 'Rename',
+        'input.rename.label': 'New name:',
+        'messages.delete.title': 'Delete',
+        'messages.delete.body': 'Delete selected items?',
+        'messages.error.title': 'Error',
+        'messages.success.title': 'Done',
+        'messages.empty.title': 'Empty',
+        'messages.empty.body': 'There is no data to export',
+        'messages.save.success': 'Saved: {path}',
+        'messages.load.error': 'Failed to load {path}:\n{error}',
+        'messages.load.success': 'Files loaded: {count}',
+        'about.text': 'Navisworks Viewpoint Manager (Qt)\nTwo trees, drag&drop, XML export.',
+        'status.search.all_found': 'All viewpoints found',
+        'context.sort_menu': 'Sort',
+        'context.sort_selected_menu': 'Sort selected',
+        'context.sort.nat_asc': 'Natural A→Z',
+        'context.sort.nat_desc': 'Natural Z→A',
+        'context.sort.guid': 'By GUID',
+        'context.sort_selected.nat_asc': 'Natural A→Z (selected only)',
+        'context.sort_selected.nat_desc': 'Natural Z→A (selected only)',
+        'context.sort_selected.guid': 'By GUID (selected only)',
+        'info.ready': 'Ready to load XML files.',
+        'defaults.unnamed_view': 'Untitled viewpoint',
+        'tabs.tasks.general': 'Overview',
+        'tabs.tasks.general_placeholder': 'Select a task on the neighbouring tabs or use the options below.',
+        'tabs.tasks.move': 'Move viewpoints',
+        'tabs.tasks.search': 'Find viewpoints',
+    },
+}
+
+
 MIME_VIEWS = 'application/x-navis-views-json'
 
 
@@ -99,6 +271,15 @@ class LeftTree(ViewsTree):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.setColumnCount(2)
+        self.setHeaderHidden(False)
+        header = self.header()
+        if header is not None:
+            header.setSectionsMovable(True)
+            header.setStretchLastSection(True)
+            mode_enum = getattr(QtWidgets.QHeaderView, 'ResizeMode', QtWidgets.QHeaderView)
+            header.setSectionResizeMode(0, mode_enum.Interactive)
+            header.setSectionResizeMode(1, mode_enum.Stretch)
         self.setDragEnabled(True)
         self.setAcceptDrops(False)
         self.setDropIndicatorShown(False)
@@ -197,7 +378,6 @@ class RightTree(ViewsTree):
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Navisworks Viewpoint Manager (Qt)')
         self.resize(1280, 800)
         
         # Убеждаемся, что окно имеет все необходимые флаги
@@ -211,40 +391,45 @@ class MainWindow(QtWidgets.QMainWindow):
         )
 
         # Данные
-        self.root_folder = ViewpointItem('Корень', str(uuid.uuid4()), is_folder=True)
+        self.current_language = 'ru'
+        self.supported_languages = list(SUPPORTED_LANGUAGES)
+        self.root_folder = self._create_root_folder()
         self.source_views_by_guid: Dict[str, ViewpointItem] = {}
+        self.toolbar_standard_button_width = 160
+        self.toolbar_wide_button_width = 240
+        self.toolbar_buttons: List[QtWidgets.QToolButton] = []
 
         # UI
         self._build_ui()
         self._connect_signals()
+        self._apply_translations()
+        self._set_info_ready_message()
 
     # UI
     def _build_ui(self):
         # Actions
-        act_open = QtGui.QAction('Загрузить XML...', self)
+        self.toolbar_buttons.clear()
+        act_open = QtGui.QAction(self)
         act_open.setShortcut('Ctrl+O')
-        act_export = QtGui.QAction('Экспорт XML...', self)
+        act_export = QtGui.QAction(self)
         act_export.setShortcut('Ctrl+S')
-        act_exit = QtGui.QAction('Выход', self)
+        act_exit = QtGui.QAction(self)
 
-        act_new_folder = QtGui.QAction('Создать папку', self)
+        act_new_folder = QtGui.QAction(self)
         act_new_folder.setShortcut('Ctrl+N')
-        act_rename = QtGui.QAction('Переименовать', self)
+        act_rename = QtGui.QAction(self)
         act_rename.setShortcut('F2')
-        act_delete = QtGui.QAction('Удалить', self)
+        act_delete = QtGui.QAction(self)
         act_delete.setShortcut(QtGui.QKeySequence.Delete)
 
-        act_collapse = QtGui.QAction('Свернуть все', self)
-        act_collapse.setToolTip('Свернуть все папки в структуре')
+        act_collapse = QtGui.QAction(self)
         act_collapse.setShortcut('Ctrl+L')
 
-        act_about = QtGui.QAction('О программе', self)
+        act_about = QtGui.QAction(self)
         
-        act_clear_all = QtGui.QAction('Очистить всё', self)
-        act_clear_all.setToolTip('Очистить все загруженные данные и сбросить форму')
+        act_clear_all = QtGui.QAction(self)
         
-        act_clean_names = QtGui.QAction('Очистить счётчики в именах', self)
-        act_clean_names.setToolTip('Убрать счётчики точек из имён папок (например: "ЛКП (213)" → "ЛКП")')
+        act_clean_names = QtGui.QAction(self)
 
         self.actions = {
             'open': act_open,
@@ -258,60 +443,69 @@ class MainWindow(QtWidgets.QMainWindow):
             'clear_all': act_clear_all,
             'clean_names': act_clean_names,
         }
+        for key, act in self.actions.items():
+            act.setObjectName(f'action_{key}')
 
         menubar = self.menuBar()
-        m_file = menubar.addMenu('Файл')
-        m_file.addAction(act_open)
-        m_file.addAction(act_export)
-        m_file.addSeparator()
-        m_file.addAction(act_clear_all)
-        m_file.addAction(act_clean_names)
-        m_file.addSeparator()
-        m_file.addAction(act_exit)
+        self.menu_file = menubar.addMenu('')
+        self.menu_file.addAction(act_open)
+        self.menu_file.addAction(act_export)
+        self.menu_file.addSeparator()
+        self.menu_file.addAction(act_clear_all)
+        self.menu_file.addAction(act_clean_names)
+        self.menu_file.addSeparator()
+        self.menu_file.addAction(act_exit)
 
-        m_edit = menubar.addMenu('Правка')
-        m_edit.addAction(act_new_folder)
-        m_edit.addAction(act_rename)
-        m_edit.addAction(act_delete)
+        self.menu_edit = menubar.addMenu('')
+        self.menu_edit.addAction(act_new_folder)
+        self.menu_edit.addAction(act_rename)
+        self.menu_edit.addAction(act_delete)
 
-        m_view = menubar.addMenu('Вид')
-        m_view.addAction(act_collapse)
+        self.menu_language = menubar.addMenu('')
+        self.language_action_group = QtGui.QActionGroup(self)
+        self.language_action_group.setExclusive(True)
+        self.language_actions: Dict[str, QtGui.QAction] = {}
+        for code in self.supported_languages:
+            act_lang = QtGui.QAction(self)
+            act_lang.setCheckable(True)
+            act_lang.triggered.connect(lambda checked, c=code: self.set_language(c) if checked else None)
+            self.language_action_group.addAction(act_lang)
+            self.menu_language.addAction(act_lang)
+            self.language_actions[code] = act_lang
 
-        m_help = menubar.addMenu('Справка')
-        m_help.addAction(act_about)
+        self.menu_view = menubar.addMenu('')
+        self.menu_view.addAction(act_collapse)
 
-        toolbar = self.addToolBar('Main')
-        toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
-        toolbar.setMovable(False)
-        toolbar.addAction(act_open)
-        toolbar.addAction(act_new_folder)
-        toolbar.addAction(act_delete)
-        toolbar.addAction(act_clean_names)
-        toolbar.addAction(act_collapse)
-        toolbar.addAction(act_export)
-        
-        # Улучшаем стили кнопок
-        toolbar.setStyleSheet("""
-            QToolBar {
-                spacing: 3px;
+        self.menu_help = menubar.addMenu('')
+        self.menu_help.addAction(act_about)
+
+        uniform_menu_style = """
+            QMenu {
                 padding: 4px;
             }
-            QToolButton {
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                padding: 6px 12px;
-                margin: 2px;
-                background-color: #f0f0f0;
+            QMenu::item {
+                padding: 6px 18px;
+                min-width: 160px;
             }
-            QToolButton:hover {
-                background-color: #e0e0e0;
-                border-color: #999;
-            }
-            QToolButton:pressed {
-                background-color: #d0d0d0;
-                border-color: #666;
-            }
-        """)
+        """
+        for menu in (self.menu_file, self.menu_edit, self.menu_language, self.menu_view, self.menu_help):
+            menu.setStyleSheet(uniform_menu_style)
+
+        self.toolbar = self.addToolBar('')
+        self.toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self.toolbar.setMovable(False)
+        self._add_toolbar_button(act_open)
+        self._add_toolbar_button(act_export)
+        self._add_toolbar_button(act_new_folder)
+        self._add_toolbar_button(act_delete)
+        self._add_toolbar_button(act_collapse)
+        self._add_toolbar_button(act_clean_names, wide=True)
+        self.toolbar.addSeparator()
+        self.always_on_top_checkbox = QtWidgets.QCheckBox()
+        self.always_on_top_checkbox.setChecked(False)
+        self.always_on_top_checkbox.toggled.connect(self.toggle_always_on_top)
+        self.toolbar_checkbox_action = self.toolbar.addWidget(self.always_on_top_checkbox)
+        self._update_toolbar_button_widths()
 
         # Центральный виджет
         central = QtWidgets.QWidget(self)
@@ -320,96 +514,143 @@ class MainWindow(QtWidgets.QMainWindow):
         # Основной layout с галочкой сверху справа
         main_layout = QtWidgets.QVBoxLayout(central)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        
-        # Верхняя панель с галочкой справа
-        top_panel = QtWidgets.QWidget()
-        top_panel_layout = QtWidgets.QHBoxLayout(top_panel)
-        top_panel_layout.setContentsMargins(10, 5, 10, 5)
-        top_panel_layout.addStretch()  # Растягиваем слева
-        
-        # Галочка "Поверх окон" справа
-        self.always_on_top_checkbox = QtWidgets.QCheckBox('Поверх окон')
-        self.always_on_top_checkbox.setChecked(False)
-        self.always_on_top_checkbox.toggled.connect(self.toggle_always_on_top)
-        top_panel_layout.addWidget(self.always_on_top_checkbox)
-        
-        main_layout.addWidget(top_panel)
-        
         # Основной горизонтальный layout
         h = QtWidgets.QHBoxLayout()
         h.setContentsMargins(6, 6, 6, 6)
         main_layout.addLayout(h)
         splitter_main = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
-        # Панель массового распределения
-        controls_bar = QtWidgets.QWidget(self)
-        controls_layout = QtWidgets.QHBoxLayout(controls_bar)
-        controls_layout.setContentsMargins(0, 0, 0, 0)
-        controls_layout.setSpacing(6)
-        controls_layout.addWidget(QtWidgets.QLabel('Имена точек (через пробел):'))
-        self.bulk_names_edit = QtWidgets.QLineEdit()
-        self.bulk_names_edit.setPlaceholderText('например: 1311 1312 1314 ...')
-        controls_layout.addWidget(self.bulk_names_edit, 1)
-        controls_layout.addWidget(QtWidgets.QLabel('в папку:'))
+        # Вкладки задач под основными кнопками
+        self.tasks_tab = QtWidgets.QTabWidget()
+
+        general_tab = QtWidgets.QWidget()
+        general_layout = QtWidgets.QVBoxLayout(general_tab)
+        general_layout.setContentsMargins(12, 12, 12, 12)
+        self.general_placeholder_label = QtWidgets.QLabel()
+        self.general_placeholder_label.setWordWrap(True)
+        self.general_placeholder_label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        general_layout.addWidget(self.general_placeholder_label)
+        general_layout.addStretch()
+
+        move_tab = QtWidgets.QWidget()
+        move_layout = QtWidgets.QVBoxLayout(move_tab)
+        move_layout.setContentsMargins(12, 12, 12, 12)
+        self.bulk_names_label = QtWidgets.QLabel()
+        self.bulk_names_label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignBottom)
+        move_layout.addWidget(self.bulk_names_label)
+        self.bulk_names_edit = QtWidgets.QPlainTextEdit()
+        self.bulk_names_edit.setTabChangesFocus(False)
+        self.bulk_names_edit.setLineWrapMode(QtWidgets.QPlainTextEdit.NoWrap)
+        self.bulk_names_edit.setFixedHeight(120)
+        move_layout.addWidget(self.bulk_names_edit, 1)
+
+        separator_panel = QtWidgets.QWidget()
+        separator_layout = QtWidgets.QHBoxLayout(separator_panel)
+        separator_layout.setContentsMargins(0, 0, 0, 0)
+        separator_layout.setSpacing(12)
+        self.separator_label = QtWidgets.QLabel()
+        separator_layout.addWidget(self.separator_label)
+        self.separator_checks: Dict[str, QtWidgets.QCheckBox] = {}
+        column_layout = QtWidgets.QVBoxLayout()
+        column_layout.setSpacing(4)
+        for key in ('tab', 'semicolon', 'comma', 'space'):
+            check = QtWidgets.QCheckBox()
+            self.separator_checks[key] = check
+            column_layout.addWidget(check)
+        self.other_separator_check = QtWidgets.QCheckBox()
+        self.other_separator_check.toggled.connect(self._on_other_separator_toggled)
+        column_layout.addWidget(self.other_separator_check)
+        column_layout.addStretch(1)
+        separator_layout.addLayout(column_layout)
+        self.separator_check_labels: Dict[str, QtWidgets.QLabel] = {}
+        labels_layout = QtWidgets.QVBoxLayout()
+        labels_layout.setSpacing(4)
+        for key in ('tab', 'semicolon', 'comma', 'space'):
+            label = QtWidgets.QLabel()
+            label.setMinimumWidth(140)
+            label.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+            self.separator_check_labels[key] = label
+            labels_layout.addWidget(label)
+        other_label_layout = QtWidgets.QHBoxLayout()
+        other_label_layout.setContentsMargins(0, 0, 0, 0)
+        other_label_layout.setSpacing(4)
+        self.other_separator_label = QtWidgets.QLabel()
+        other_label_layout.addWidget(self.other_separator_label)
+        self.other_separator_edit = QtWidgets.QLineEdit()
+        self.other_separator_edit.setMaxLength(1)
+        self.other_separator_edit.setFixedWidth(40)
+        self.other_separator_edit.setEnabled(False)
+        other_label_layout.addWidget(self.other_separator_edit)
+        other_label_layout.addStretch(1)
+        labels_layout.addLayout(other_label_layout)
+        labels_layout.addStretch(1)
+        separator_layout.addLayout(labels_layout, 1)
+        separator_layout.addStretch(1)
+        move_layout.addWidget(separator_panel)
+        move_layout.addStretch()
+
+        controls_row = QtWidgets.QHBoxLayout()
+        controls_row.setSpacing(6)
+        self.target_folder_label = QtWidgets.QLabel()
+        controls_row.addWidget(self.target_folder_label)
         self.target_folder_combo = QtWidgets.QComboBox()
-        # Ширина по содержимому и расширяемость
         self.target_folder_combo.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self.target_folder_combo.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        controls_layout.addWidget(self.target_folder_combo, 1)
-        # Кнопки
-        buttons_layout = QtWidgets.QHBoxLayout()
-        self.bulk_move_btn = QtWidgets.QPushButton('Переместить')
-        buttons_layout.addWidget(self.bulk_move_btn)
-        
-        self.clear_button = QtWidgets.QPushButton('Очистить')
-        buttons_layout.addWidget(self.clear_button)
-        
-        controls_layout.addLayout(buttons_layout)
-        
-        # Вторая строка - поиск
-        search_layout = QtWidgets.QHBoxLayout()
-        search_layout.addWidget(QtWidgets.QLabel('Поиск точек:'))
+        controls_row.addWidget(self.target_folder_combo, 1)
+        self.bulk_move_btn = QtWidgets.QPushButton()
+        controls_row.addWidget(self.bulk_move_btn)
+        self.clear_button = QtWidgets.QPushButton()
+        controls_row.addWidget(self.clear_button)
+        controls_row.addStretch(1)
+        move_layout.addLayout(controls_row)
+
+        search_tab = QtWidgets.QWidget()
+        search_tab_layout = QtWidgets.QVBoxLayout(search_tab)
+        search_tab_layout.setContentsMargins(12, 12, 12, 12)
+        search_row = QtWidgets.QHBoxLayout()
+        search_row.setSpacing(6)
+        self.search_label = QtWidgets.QLabel()
+        search_row.addWidget(self.search_label)
         self.search_names_edit = QtWidgets.QLineEdit()
-        self.search_names_edit.setPlaceholderText('например: 1311 1312 1314 ...')
-        search_layout.addWidget(self.search_names_edit, 1)
-        self.search_button = QtWidgets.QPushButton('Поиск')
-        search_layout.addWidget(self.search_button)
-        self.copy_results_button = QtWidgets.QPushButton('Копировать результаты')
-        search_layout.addWidget(self.copy_results_button)
-        
-        # Результаты поиска
+        search_row.addWidget(self.search_names_edit, 1)
+        self.search_button = QtWidgets.QPushButton()
+        search_row.addWidget(self.search_button)
+        self.copy_results_button = QtWidgets.QPushButton()
+        search_row.addWidget(self.copy_results_button)
+        search_tab_layout.addLayout(search_row)
         self.search_results = QtWidgets.QTextEdit()
         self.search_results.setMaximumHeight(100)
-        self.search_results.setPlaceholderText('Результаты поиска...')
         self.search_results.setReadOnly(True)
-        
+        search_tab_layout.addWidget(self.search_results)
+
+        self.tasks_tab_general_index = self.tasks_tab.addTab(general_tab, '')
+        self.tasks_tab_move_index = self.tasks_tab.addTab(move_tab, '')
+        self.tasks_tab_search_index = self.tasks_tab.addTab(search_tab, '')
+
         v_main = QtWidgets.QVBoxLayout()
         v_main.setContentsMargins(0, 0, 0, 0)
         container = QtWidgets.QWidget()
         container.setLayout(v_main)
-        v_main.addWidget(controls_bar)
-        v_main.addLayout(search_layout)
-        v_main.addWidget(self.search_results)
+        v_main.addWidget(self.tasks_tab)
         v_main.addWidget(splitter_main, 1)
         h.addWidget(container)
 
         # Левая панель
-        left_box = QtWidgets.QGroupBox('Все точки обзора')
-        v_left = QtWidgets.QVBoxLayout(left_box)
+        self.left_box = QtWidgets.QGroupBox()
+        v_left = QtWidgets.QVBoxLayout(self.left_box)
         # Поиск по точкам
         self.left_filter = QtWidgets.QLineEdit()
-        self.left_filter.setPlaceholderText('Фильтр точек (имя или GUID)')
         self.left_filter.setClearButtonEnabled(True)
         v_left.addWidget(self.left_filter)
         # Дерево всех точек
         self.left_tree = LeftTree()
-        self.left_tree.setHeaderLabels(['Точка обзора', 'Файл'])
+        self.left_tree.setHeaderLabels(['', ''])
         v_left.addWidget(self.left_tree)
 
         # Правая панель: вертикальный сплиттер (структура + информация)
         right_container = QtWidgets.QSplitter(QtCore.Qt.Vertical)
 
-        struct_box = QtWidgets.QGroupBox('Структура организации')
-        v_struct = QtWidgets.QVBoxLayout(struct_box)
+        self.struct_box = QtWidgets.QGroupBox()
+        v_struct = QtWidgets.QVBoxLayout(self.struct_box)
         self.right_tree = RightTree()
         v_struct.addWidget(self.right_tree)
 
@@ -422,7 +663,7 @@ class MainWindow(QtWidgets.QMainWindow):
         info_layout = QtWidgets.QVBoxLayout(info_wrap)
         info_layout.setContentsMargins(4, 4, 4, 4)
         info_layout.addWidget(self.info_text)
-        self.info_log_tabs.addTab(info_wrap, 'Инфо')
+        self.info_tab_index = self.info_log_tabs.addTab(info_wrap, '')
         # Лог
         self.log_text = QtWidgets.QPlainTextEdit()
         self.log_text.setReadOnly(True)
@@ -430,20 +671,168 @@ class MainWindow(QtWidgets.QMainWindow):
         log_layout = QtWidgets.QVBoxLayout(log_wrap)
         log_layout.setContentsMargins(4, 4, 4, 4)
         log_layout.addWidget(self.log_text)
-        self.info_log_tabs.addTab(log_wrap, 'Лог')
+        self.log_tab_index = self.info_log_tabs.addTab(log_wrap, '')
 
-        right_container.addWidget(struct_box)
+        right_container.addWidget(self.struct_box)
         right_container.addWidget(self.info_log_tabs)
         right_container.setStretchFactor(0, 3)
         right_container.setStretchFactor(1, 1)
 
-        splitter_main.addWidget(left_box)
+        splitter_main.addWidget(self.left_box)
         splitter_main.addWidget(right_container)
         splitter_main.setStretchFactor(0, 1)
         splitter_main.setStretchFactor(1, 2)
 
         # Контекстное меню для правого дерева
         self.right_tree.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+
+        if self.current_language in self.language_actions:
+            action = self.language_actions[self.current_language]
+            action.blockSignals(True)
+            action.setChecked(True)
+            action.blockSignals(False)
+
+    def _on_other_separator_toggled(self, checked: bool) -> None:
+        self.other_separator_edit.setEnabled(checked)
+        if not checked:
+            self.other_separator_edit.clear()
+
+    def _add_toolbar_button(self, action: QtGui.QAction, *, wide: bool = False) -> QtWidgets.QToolButton:
+        button = self._create_toolbar_button(action, wide=wide)
+        self.toolbar.addWidget(button)
+        self.toolbar_buttons.append(button)
+        return button
+
+    def _create_toolbar_button(self, action: QtGui.QAction, *, wide: bool = False) -> QtWidgets.QToolButton:
+        button = QtWidgets.QToolButton(self.toolbar)
+        button.setDefaultAction(action)
+        button.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        button.setAutoRaise(False)
+        button.setFocusPolicy(QtCore.Qt.NoFocus)
+        button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        button._wide = wide  # type: ignore[attr-defined]
+        object_name = action.objectName() or f'action_{id(action)}'
+        button.setObjectName(f'btn_{object_name}')
+        button.setStyleSheet(
+            "QToolButton { padding: 6px 12px; margin: 2px; border: 1px solid #c8c8c8; "
+            "border-radius: 6px; background-color: #f7f7f7; }"
+            "QToolButton:hover { background-color: #ececec; border-color: #a0a0a0; }"
+            "QToolButton:pressed { background-color: #dcdcdc; border-color: #888888; }"
+        )
+        button.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        button.setMinimumHeight(40)
+        return button
+
+    def _update_toolbar_button_widths(self) -> None:
+        for button in self.toolbar_buttons:
+            wide = bool(getattr(button, '_wide', False))
+            width = self.toolbar_wide_button_width if wide else self.toolbar_standard_button_width
+            button.setFixedWidth(width)
+
+    def _t(self, key: str, **kwargs) -> str:
+        lang_map = LANGUAGE_STRINGS.get(self.current_language, {})
+        fallback = LANGUAGE_STRINGS.get('en', {})
+        text = lang_map.get(key, fallback.get(key, key))
+        if kwargs:
+            try:
+                return text.format(**kwargs)
+            except Exception:
+                return text
+        return text
+
+    def _apply_translations(self) -> None:
+        self.setWindowTitle(self._t('window.title'))
+        self.toolbar.setWindowTitle(self._t('toolbar.main'))
+
+        for key, action in self.actions.items():
+            action.setText(self._t(f'actions.{key}'))
+        self.actions['collapse'].setToolTip(self._t('tooltips.collapse'))
+        self.actions['clear_all'].setToolTip(self._t('tooltips.clear_all'))
+        self.actions['clean_names'].setToolTip(self._t('tooltips.clean_names'))
+
+        self.menu_file.setTitle(self._t('menus.file'))
+        self.menu_edit.setTitle(self._t('menus.edit'))
+        self.menu_language.setTitle(self._t('menus.language'))
+        self.menu_view.setTitle(self._t('menus.view'))
+        self.menu_help.setTitle(self._t('menus.help'))
+
+        for code, action in self.language_actions.items():
+            action.blockSignals(True)
+            action.setText(self._t(f'language.{code}'))
+            action.setChecked(code == self.current_language)
+            action.blockSignals(False)
+
+        self._update_toolbar_button_widths()
+        self.tasks_tab.setTabText(self.tasks_tab_general_index, self._t('tabs.tasks.general'))
+        self.tasks_tab.setTabText(self.tasks_tab_move_index, self._t('tabs.tasks.move'))
+        self.tasks_tab.setTabText(self.tasks_tab_search_index, self._t('tabs.tasks.search'))
+        self.general_placeholder_label.setText(self._t('tabs.tasks.general_placeholder'))
+
+        self.always_on_top_checkbox.setText(self._t('checkbox.always_on_top'))
+        self.bulk_names_label.setText(self._t('labels.bulk_names'))
+        self.bulk_names_edit.setPlaceholderText(self._t('placeholders.bulk_names'))
+        self.target_folder_label.setText(self._t('labels.target_folder'))
+        self.bulk_move_btn.setText(self._t('buttons.bulk_move'))
+        self.clear_button.setText(self._t('buttons.clear'))
+        self.separator_label.setText(self._t('bulk.separator.label'))
+        separator_keys = ('tab', 'semicolon', 'comma', 'space')
+        for key in separator_keys:
+            label = self.separator_check_labels[key]
+            label.setText(self._t(f'bulk.separator.{key}'))
+        self.other_separator_label.setText(self._t('bulk.separator.other'))
+        self.other_separator_edit.setPlaceholderText(self._t('bulk.separator.other_placeholder'))
+
+        self.search_label.setText(self._t('labels.search'))
+        self.search_names_edit.setPlaceholderText(self._t('placeholders.search_names'))
+        self.search_button.setText(self._t('buttons.search'))
+        self.copy_results_button.setText(self._t('buttons.copy_results'))
+        self.search_results.setPlaceholderText(self._t('placeholders.search_results'))
+
+        self.left_box.setTitle(self._t('groups.left'))
+        self.left_filter.setPlaceholderText(self._t('placeholders.left_filter'))
+        self.left_tree.setHeaderLabels([
+            self._t('tree.headers.name'),
+            self._t('tree.headers.file'),
+        ])
+
+        self.struct_box.setTitle(self._t('groups.right'))
+        self.info_log_tabs.setTabText(self.info_tab_index, self._t('tabs.info'))
+        self.info_log_tabs.setTabText(self.log_tab_index, self._t('tabs.log'))
+
+        # Если в информационном окне было сообщение о готовности — обновим его локализацию
+        current_info = self.info_text.toPlainText().strip()
+        ready_variants = {LANGUAGE_STRINGS[code].get('info.ready') for code in LANGUAGE_STRINGS}
+        if current_info in ready_variants:
+            self._set_info_ready_message()
+
+    def set_language(self, lang: str) -> None:
+        if lang not in LANGUAGE_STRINGS:
+            return
+        if lang == self.current_language:
+            return
+        if lang not in self.supported_languages:
+            self.supported_languages.append(lang)
+        if lang not in self.language_actions:
+            act_lang = QtGui.QAction(self)
+            act_lang.setCheckable(True)
+            act_lang.triggered.connect(lambda checked, c=lang: self.set_language(c) if checked else None)
+            self.language_action_group.addAction(act_lang)
+            self.menu_language.addAction(act_lang)
+            self.language_actions[lang] = act_lang
+        self.current_language = lang
+        self.root_folder.name = self._t('data.root_folder')
+        self._apply_translations()
+        self.refresh_trees()
+
+    def _create_root_folder(self) -> ViewpointItem:
+        return ViewpointItem(self._t('data.root_folder'), str(uuid.uuid4()), is_folder=True)
+
+    def _set_info_ready_message(self, force: bool = False) -> None:
+        ready_text = self._t('info.ready')
+        content = self.info_text.toPlainText().strip()
+        if force or not content or content in {LANGUAGE_STRINGS[code].get('info.ready') for code in LANGUAGE_STRINGS}:
+            self.info_text.clear()
+            self.info_text.append(ready_text)
 
     def _connect_signals(self):
         self.actions['open'].triggered.connect(self.load_xml_files)
@@ -489,13 +878,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 continue
             added.add(v.guid)
             # Создаем элемент с двумя колонками: имя точки и файл
-            file_name = v.source_file if v.source_file else 'Структура'
+            file_name = v.source_file if v.source_file else self._t('structure_source')
             it = QtWidgets.QTreeWidgetItem([f"👁 {v.name}", file_name])
             it.setData(0, QtCore.Qt.UserRole, v)
             self.left_tree.addTopLevelItem(it)
         # Применить активный фильтр, если есть
         if self.left_filter.text().strip():
             self.apply_left_filter(self.left_filter.text())
+
+        # Автоподбор ширины столбцов после загрузки данных
+        if self.left_tree.columnCount() >= 1:
+            self.left_tree.resizeColumnToContents(0)
+        if self.left_tree.columnCount() >= 2:
+            self.left_tree.resizeColumnToContents(1)
 
         # Правое
         self.right_tree.clear()
@@ -576,7 +971,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.target_folder_combo.blockSignals(True)
         self.target_folder_combo.clear()
         # Добавим корень явно
-        self.target_folder_combo.addItem('Корень', self.root_folder)
+        self.target_folder_combo.addItem(self._t('data.root_folder'), self.root_folder)
         for label, folder in self._iter_folders(self.root_folder):
             if folder is self.root_folder:
                 continue
@@ -729,7 +1124,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.search_results.setText(result_text)
             self.append_log(f"Поиск: найдено {len(tokens) - len(not_found)} из {len(tokens)}, не найдено: {len(not_found)}")
         else:
-            self.search_results.setText('Все точки найдены')
+            self.search_results.setText(self._t('status.search.all_found'))
             self.append_log(f"Поиск: все {len(tokens)} точек найдены")
 
     def copy_search_results(self):
@@ -747,7 +1142,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.right_tree.clear()
         
         # Сбрасываем данные
-        self.root_folder = ViewpointItem('Корень', str(uuid.uuid4()), is_folder=True)
+        self.root_folder = self._create_root_folder()
         self.source_views_by_guid.clear()
         
         # Очищаем формы
@@ -763,8 +1158,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.log_text.clear()
         
         # Обновляем информационную панель
-        self.info_text.clear()
-        self.info_text.append('Готов к загрузке XML файлов.')
+        self._set_info_ready_message(force=True)
         
         self.append_log("Все данные очищены. Форма сброшена к начальному состоянию.")
 
@@ -916,16 +1310,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # Загрузка/парсинг
     def load_xml_files(self):
-        paths, _ = QtWidgets.QFileDialog.getOpenFileNames(self, 'Выберите XML файлы', filter='XML Files (*.xml)')
+        paths, _ = QtWidgets.QFileDialog.getOpenFileNames(self, self._t('dialogs.open_xml.title'), filter='XML Files (*.xml)')
         if not paths:
             return
         for p in paths:
             try:
                 self._load_xml_file(p)
             except Exception as ex:
-                QtWidgets.QMessageBox.critical(self, 'Ошибка', f'Не удалось загрузить {p}:\n{ex}')
+                QtWidgets.QMessageBox.critical(self, self._t('messages.error.title'), self._t('messages.load.error', path=p, error=ex))
         self.refresh_trees()
-        QtWidgets.QMessageBox.information(self, 'Готово', f'Загружено файлов: {len(paths)}')
+        QtWidgets.QMessageBox.information(self, self._t('messages.success.title'), self._t('messages.load.success', count=len(paths)))
 
     def _load_xml_file(self, file_path: str):
         loaded_points = []  # Список загруженных точек для лога
@@ -950,7 +1344,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 # Наполняем левое дерево источником
                 for ch in viewpoints:
                     if ch.tag == 'view':
-                        name = ch.get('name', 'Безымянная точка')
+                        name = ch.get('name', self._t('defaults.unnamed_view'))
                         guid = ch.get('guid', str(uuid.uuid4()))
                         xml_content = ET.tostring(ch, encoding='unicode')
                         file_name = os.path.basename(file_path)
@@ -1062,7 +1456,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # Правка
     def create_folder(self):
-        name, ok = QtWidgets.QInputDialog.getText(self, 'Создать папку', 'Имя папки:')
+        name, ok = QtWidgets.QInputDialog.getText(self, self._t('input.create_folder.title'), self._t('input.create_folder.label'))
         if not ok or not name:
             return
         sel = self.right_tree.selectedItems()
@@ -1080,7 +1474,7 @@ class MainWindow(QtWidgets.QMainWindow):
         sel = self.right_tree.selectedItems()
         if not sel:
             return
-        if QtWidgets.QMessageBox.question(self, 'Удалить', 'Удалить выбранные элементы?') != QtWidgets.QMessageBox.Yes:
+        if QtWidgets.QMessageBox.question(self, self._t('messages.delete.title'), self._t('messages.delete.body')) != QtWidgets.QMessageBox.Yes:
             return
         # Удаляем только из структуры
         for it in sel:
@@ -1097,7 +1491,7 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         it = sel[0]
         m: ViewpointItem = it.data(0, QtCore.Qt.UserRole)
-        new_name, ok = QtWidgets.QInputDialog.getText(self, 'Переименовать', 'Новое имя:', text=m.name)
+        new_name, ok = QtWidgets.QInputDialog.getText(self, self._t('input.rename.title'), self._t('input.rename.label'), text=m.name)
         if ok and new_name:
             m.name = new_name
             self.refresh_trees()
@@ -1107,15 +1501,15 @@ class MainWindow(QtWidgets.QMainWindow):
         it = self.right_tree.itemAt(pos)
         menu = QtWidgets.QMenu(self)
         menu.addAction(self.actions['new_folder'])
-        sort_menu = menu.addMenu('Сортировка')
-        a_nat_asc = sort_menu.addAction('По-умному A→Z')
-        a_nat_desc = sort_menu.addAction('По-умному Z→A')
-        a_guid = sort_menu.addAction('По GUID')
+        sort_menu = menu.addMenu(self._t('context.sort_menu'))
+        a_nat_asc = sort_menu.addAction(self._t('context.sort.nat_asc'))
+        a_nat_desc = sort_menu.addAction(self._t('context.sort.nat_desc'))
+        a_guid = sort_menu.addAction(self._t('context.sort.guid'))
         # Сортировка только выделенных точек
-        sort_sel_menu = menu.addMenu('Сортировать выделенные')
-        as_nat_asc = sort_sel_menu.addAction('По-умному A→Z (только выделенные)')
-        as_nat_desc = sort_sel_menu.addAction('По-умному Z→A (только выделенные)')
-        as_guid = sort_sel_menu.addAction('По GUID (только выделенные)')
+        sort_sel_menu = menu.addMenu(self._t('context.sort_selected_menu'))
+        as_nat_asc = sort_sel_menu.addAction(self._t('context.sort_selected.nat_asc'))
+        as_nat_desc = sort_sel_menu.addAction(self._t('context.sort_selected.nat_desc'))
+        as_guid = sort_sel_menu.addAction(self._t('context.sort_selected.guid'))
         if it is not None:
             menu.addAction(self.actions['rename'])
             menu.addAction(self.actions['delete'])
@@ -1159,16 +1553,16 @@ class MainWindow(QtWidgets.QMainWindow):
     # Экспорт
     def export_xml(self):
         if not self.root_folder.children:
-            QtWidgets.QMessageBox.warning(self, 'Пусто', 'Нет данных для экспорта')
+            QtWidgets.QMessageBox.warning(self, self._t('messages.empty.title'), self._t('messages.empty.body'))
             return
-        path, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Сохранить XML', filter='XML Files (*.xml)')
+        path, _ = QtWidgets.QFileDialog.getSaveFileName(self, self._t('dialogs.save_xml.title'), filter='XML Files (*.xml)')
         if not path:
             return
         try:
             self._create_export_xml(path)
-            QtWidgets.QMessageBox.information(self, 'Готово', f'Сохранено: {path}')
+            QtWidgets.QMessageBox.information(self, self._t('messages.success.title'), self._t('messages.save.success', path=path))
         except Exception as ex:
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', str(ex))
+            QtWidgets.QMessageBox.critical(self, self._t('messages.error.title'), str(ex))
 
     def _create_export_xml(self, file_path: str):
         exchange = ET.Element('exchange')
@@ -1215,9 +1609,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # About
     def show_about(self):
-        QtWidgets.QMessageBox.information(self, 'О программе',
-                                          'Navisworks Viewpoint Manager (Qt)\n' \
-                                          'Два дерева, drag&drop, экспорт XML.')
+        QtWidgets.QMessageBox.information(self, self._t('actions.about'), self._t('about.text'))
 
 
 def main():
