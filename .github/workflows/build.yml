@@ -1,0 +1,64 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ master, main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install PyInstaller
+        
+    - name: Read version
+      id: version
+      run: |
+        python -c "from version import __version__; print(f'version={__version__}')" >> $GITHUB_OUTPUT
+        
+    - name: Build EXE
+      run: |
+        python build_exe.py
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Navisworks Viewpoint Manager v${{ steps.version.outputs.version }}
+        path: dist/*.exe
+        retention-days: 30
+        
+    - name: Create Release (on tag)
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/*.exe
+        body: |
+          ## Navisworks Viewpoint Manager v${{ steps.version.outputs.version }}
+          
+          Автоматическая сборка из тега ${{ github.ref_name }}
+          
+          ### Что нового:
+          - Проверьте [историю коммитов](https://github.com/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.sha }}) для списка изменений
+          
+          ### Загрузка:
+          - Скачайте файл `Navisworks Viewpoint Manager v${{ steps.version.outputs.version }}.exe` из артефактов выше
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

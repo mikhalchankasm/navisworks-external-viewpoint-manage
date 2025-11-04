@@ -8,6 +8,11 @@ import subprocess
 import sys
 import os
 
+try:
+    from version import __version__
+except ImportError:
+    __version__ = "1.0.0"
+
 def build_exe():
     """Собрать exe файл с помощью PyInstaller"""
     
@@ -18,14 +23,18 @@ def build_exe():
         print("PyInstaller не установлен. Устанавливаю...")
         subprocess.run([sys.executable, "-m", "pip", "install", "PyInstaller"])
     
+    # Имя exe файла с версией
+    exe_name = f"Navisworks Viewpoint Manager v{__version__}"
+    
     # Команда для сборки
     cmd = [
         "pyinstaller",
         "--onefile",                    # Создать один exe файл
         "--windowed",                   # Без консоли (GUI приложение)
-        "--name=Navisworks Viewpoint Manager",  # Имя exe файла
+        f"--name={exe_name}",           # Имя exe файла с версией
         "--icon=icon.ico",              # Иконка (если есть)
         "--add-data=requirements.txt;.", # Включить requirements.txt
+        "--add-data=version.py;.",      # Включить version.py
         "--hidden-import=PySide6.QtCore",
         "--hidden-import=PySide6.QtGui", 
         "--hidden-import=PySide6.QtWidgets",
@@ -49,10 +58,11 @@ def build_exe():
         result = subprocess.run(cmd, check=True, capture_output=True, text=True)
         print("✅ Сборка успешно завершена!")
         print(f"exe файл создан в папке: dist/")
-        print(f"Имя файла: Navisworks Viewpoint Manager.exe")
+        print(f"Имя файла: {exe_name}.exe")
+        print(f"Версия: {__version__}")
         
         # Показываем размер файла
-        exe_path = "dist/Navisworks Viewpoint Manager.exe"
+        exe_path = f"dist/{exe_name}.exe"
         if os.path.exists(exe_path):
             size_mb = os.path.getsize(exe_path) / (1024 * 1024)
             print(f"Размер файла: {size_mb:.1f} МБ")

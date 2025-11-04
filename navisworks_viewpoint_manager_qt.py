@@ -20,6 +20,10 @@ from PySide6 import QtCore, QtGui, QtWidgets
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
+try:
+    from version import __version__
+except ImportError:
+    __version__ = "1.0.0"
 
 SUPPORTED_LANGUAGES = ['ru', 'en']
 
@@ -1609,7 +1613,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # About
     def show_about(self):
-        QtWidgets.QMessageBox.information(self, self._t('actions.about'), self._t('about.text'))
+        about_text = self._t('about.text')
+        version_text = f"{about_text}\n\nВерсия: {__version__}" if self.current_language == 'ru' else f"{about_text}\n\nVersion: {__version__}"
+        QtWidgets.QMessageBox.information(self, self._t('actions.about'), version_text)
 
 
 def main():
