@@ -7,6 +7,12 @@
 import subprocess
 import sys
 import os
+import io
+
+# Настройка кодировки для Windows консоли
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 try:
     from version import __version__
@@ -56,7 +62,7 @@ def build_exe():
     
     try:
         result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-        print("✅ Сборка успешно завершена!")
+        print("[OK] Сборка успешно завершена!")
         print(f"exe файл создан в папке: dist/")
         print(f"Имя файла: {exe_name}.exe")
         print(f"Версия: {__version__}")
@@ -68,7 +74,7 @@ def build_exe():
             print(f"Размер файла: {size_mb:.1f} МБ")
             
     except subprocess.CalledProcessError as e:
-        print(f"❌ Ошибка при сборке: {e}")
+        print(f"[ERROR] Ошибка при сборке: {e}")
         print(f"Вывод: {e.stdout}")
         print(f"Ошибки: {e.stderr}")
         return False
@@ -80,14 +86,14 @@ if __name__ == "__main__":
     
     # Проверяем наличие основного файла
     if not os.path.exists("navisworks_viewpoint_manager_qt.py"):
-        print("❌ Файл navisworks_viewpoint_manager_qt.py не найден!")
+        print("[ERROR] Файл navisworks_viewpoint_manager_qt.py не найден!")
         sys.exit(1)
     
     success = build_exe()
     
     if success:
-        print("\n🎉 Сборка завершена успешно!")
+        print("\n[SUCCESS] Сборка завершена успешно!")
         print("exe файл находится в папке dist/")
     else:
-        print("\n💥 Сборка не удалась!")
+        print("\n[FAILED] Сборка не удалась!")
         sys.exit(1)
