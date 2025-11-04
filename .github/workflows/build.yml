@@ -30,8 +30,9 @@ jobs:
         
     - name: Read version
       id: version
+      shell: pwsh
       run: |
-        python -c "from version import __version__; print(f'version={__version__}')" >> $GITHUB_OUTPUT
+        python -c "from version import __version__; print(f'version={__version__}')" | ForEach-Object { $content = $_; Add-Content -Path $env:GITHUB_OUTPUT -Value $content }
         
     - name: Build EXE
       run: |
@@ -44,21 +45,39 @@ jobs:
         path: dist/*.exe
         retention-days: 30
         
+    - name: Get tag name
+      id: tag
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      shell: bash
+      
     - name: Create Release (on tag)
       if: startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{ steps.tag.outputs.tag }}
+        name: Navisworks Viewpoint Manager ${{ steps.tag.outputs.tag }}
         files: dist/*.exe
+        draft: false
+        prerelease: false
         body: |
-          ## Navisworks Viewpoint Manager v${{ steps.version.outputs.version }}
+          ## Navisworks Viewpoint Manager ${{ steps.tag.outputs.tag }}
           
-          Автоматическая сборка из тега ${{ github.ref_name }}
+          Автоматическая сборка из тега ${{ steps.tag.outputs.tag }}
           
-          ### Что нового:
-          - Проверьте [историю коммитов](https://github.com/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.sha }}) для списка изменений
+          ### Возможности:
+          - ✅ Многоязычный интерфейс (русский/английский)
+          - ✅ Двухпанельный интерфейс с drag & drop
+          - ✅ Массовое перемещение точек
+          - ✅ Поиск точек обзора
+          - ✅ Сортировка и организация структуры
           
           ### Загрузка:
-          - Скачайте файл `Navisworks Viewpoint Manager v${{ steps.version.outputs.version }}.exe` из артефактов выше
+          Скачайте файл EXE из раздела "Assets" ниже.
+          
+          ### Системные требования:
+          - Windows 7 или новее
+          - Никаких дополнительных зависимостей не требуется
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
