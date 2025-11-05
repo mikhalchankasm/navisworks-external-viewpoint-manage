@@ -201,3 +201,9 @@ EXE файл будет создан в папке `dist/` с именем, вк
 Если возникли проблемы или вопросы:
 - Создайте [Issue](https://github.com/mikhalchankasm/navisworks-external-viewpoint-manage/issues)
 - Проверьте раздел [Releases](https://github.com/mikhalchankasm/navisworks-external-viewpoint-manage/releases) для последних версий
+
+## 💬 Обратная связь / Feedback
+
+- Оставляйте замечания и предложения в разделе [Issues](https://github.com/mikhalchankasm/navisworks-external-viewpoint-manage/issues)
+- Для предложений помечайте задачу меткой `enhancement`, для ошибок — `bug`
+- Если у вас уже есть готовое изменение — присылайте [Pull Request](https://github.com/mikhalchankasm/navisworks-external-viewpoint-manage/pulls)
